@@ -5,6 +5,7 @@ import { database } from '../database'
 import { adminJsResources } from './resources'
 import { User } from '../models'
 import bcrypt from 'bcrypt'
+import { locale } from './locale'
 
 AdminJs.registerAdapter(AdminJsSequelize)
 
@@ -12,6 +13,7 @@ export const adminJs = new AdminJs({
     databases: [database],
     rootPath: '/admin',
     resources: adminJsResources,
+    locale: locale,
     branding: {
         companyName: 'OneBitFlix',
         logo: '/logoOnebitflix.svg',
@@ -40,7 +42,7 @@ export const adminJsRouter = AdminJsExpress.buildAuthenticatedRouter(adminJs, {
         const user = await User.findOne({ where: { email } })
 
         if (user && user.role === 'admin') {
-            const matched = await bcrypt.compareSync(password.toString(), user.password)
+            const matched = await bcrypt.compare(password, user.password)
             if (matched) {
                 return user
             }
