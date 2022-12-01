@@ -1,10 +1,13 @@
 import express from 'express'
 import { database } from './database'
+import { router } from './routes'
 import { adminJs, adminJsRouter } from './adminJs'
 
 const app = express()
 
 app.use(express.static('public'))
+
+app.use(router)
 
 app.use(adminJs.options.rootPath, adminJsRouter)
 
